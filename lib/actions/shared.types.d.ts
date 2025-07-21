@@ -1,7 +1,5 @@
 import { Schema } from "mongoose";
-
 import { IUser } from "@/mongodb";
-import { ObjectId } from "mongodb";
 
 export interface CreateAnswerParams {
   content: string;

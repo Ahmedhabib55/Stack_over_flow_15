@@ -1,53 +1,51 @@
 "use client";
-import { deleteAnswer } from '@/lib/actions/answer.action';
-import { deleteQuestion } from '@/lib/actions/question.action';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { type } from 'os';
+import { deleteAnswer } from "@/lib/actions/answer.action";
+import { deleteQuestion } from "@/lib/actions/question.action";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
-interface Props{
-    type: string;
-    itemId: string;
+interface Props {
+  type: string;
+  itemId: string;
 }
 
-
-const EditDeleteAction = ({type, itemId}: Props) => {
-    const pathname = usePathname();
-    const router = useRouter();
-    const handleEdit = () => {
-        router.push(`/question/edit/${JSON.parse(itemId)}`);
+const EditDeleteAction = ({ type, itemId }: Props) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const handleEdit = () => {
+    router.push(`/question/edit/${JSON.parse(itemId)}`);
+  };
+  const handleDelete = async () => {
+    if (type === "question") {
+      // delete question
+      await deleteQuestion({ questionId: JSON.parse(itemId), path: pathname });
+    } else {
+      // delete answer
+      await deleteAnswer({ answerId: JSON.parse(itemId), path: pathname });
     }
-    const handleDelete = async () => {
-        if(type === "question"){
-            // delete question
-            await deleteQuestion( { questionId: JSON.parse(itemId), path: pathname} );
-        } else {
-            // delete answer
-            await deleteAnswer( { answerId: JSON.parse(itemId), path: pathname} );
-        }
-    }
+  };
   return (
     <div className="flex items-center justify-end gap-3 max-sm:w-full">
-        {type === "question" && (
-            <Image 
-                src="/assets/icons/edit.svg"
-                alt="Edit"
-                width={14}
-                height={14}
-                className="cursor-pointer object-contain"
-                onClick={handleEdit}
-            />    
-        )}
-        <Image 
-          src="/assets/icons/trash.svg"
-          alt="Delete"
+      {type === "question" && (
+        <Image
+          src="/assets/icons/edit.svg"
+          alt="Edit"
           width={14}
           height={14}
           className="cursor-pointer object-contain"
-          onClick={handleDelete}
+          onClick={handleEdit}
         />
+      )}
+      <Image
+        src="/assets/icons/trash.svg"
+        alt="Delete"
+        width={14}
+        height={14}
+        className="cursor-pointer object-contain"
+        onClick={handleDelete}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default EditDeleteAction
+export default EditDeleteAction;
