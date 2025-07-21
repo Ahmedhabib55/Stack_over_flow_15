@@ -34,8 +34,8 @@ const page = async ({ params, searchParams }: URLProps) => {
               _id={question._id}
               title={question.title}
               tags={question.tags.map((tag: any) => ({
-                _id: tag._id?.toString?.() || tag.toString(),
-                name: tag.name || "",
+                _id: tag?._id?.toString?.() ?? tag?.toString?.() ?? "",
+                name: tag?.name ?? "",
               }))}
               author={
                 typeof question.author === "object" &&
