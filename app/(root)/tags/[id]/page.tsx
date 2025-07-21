@@ -33,9 +33,36 @@ const page = async ({ params, searchParams }: URLProps) => {
               key={question._id}
               _id={question._id}
               title={question.title}
-              tags={question.tags}
-              author={question.author}
-              upvotes={question.upvotes}
+              tags={question.tags.map((tag: any) => ({
+                _id: tag._id?.toString?.() || tag.toString(),
+                name: tag.name || "",
+              }))}
+              author={
+                typeof question.author === "object" &&
+                question.author !== null &&
+                "_id" in question.author
+                  ? {
+                      _id:
+                        question.author._id?.toString?.() ||
+                        question.author.toString(),
+                      name:
+                        "name" in question.author &&
+                        typeof question.author.name === "string"
+                          ? question.author.name
+                          : "Unknown",
+                      picture:
+                        "picture" in question.author &&
+                        typeof question.author.picture === "string"
+                          ? question.author.picture
+                          : "/assets/images/default-profile.png",
+                    }
+                  : {
+                      _id: question.author?.toString?.() || "",
+                      name: "Unknown",
+                      picture: "/assets/images/default-profile.png",
+                    }
+              }
+              upvotes={question.upvotes.map((id: any) => id.toString())}
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}
@@ -53,10 +80,10 @@ const page = async ({ params, searchParams }: URLProps) => {
         )}
       </div>
       <div className="mt-10">
-          <Pagination 
-            pageNumber={searchParams?.page ? +searchParams.page : 1}
-            isNext={result.isNext}
-          />
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </>
   );
